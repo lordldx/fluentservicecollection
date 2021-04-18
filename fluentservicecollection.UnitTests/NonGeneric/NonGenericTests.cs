@@ -95,5 +95,26 @@ namespace fluentservicecollection.UnitTests.NonGeneric
             var provider = services.BuildServiceProvider();
             provider.GetService<IProductStore>().Should().BeOfType<CombinedStore>();
         }
+
+        [Fact]
+        public void CanAdd_AsSelf()
+        {
+            // arrange
+            var services = new ServiceCollection();
+
+            // act
+            services.AddImplementationsOfType<IStore>()
+                .AsSelf()
+                .Scoped();
+
+            // assert
+            var provider = services.BuildServiceProvider();
+            provider.GetService<IProductStore>().Should().BeNull();
+            provider.GetService<ProductStore>().Should().BeOfType<ProductStore>();
+            provider.GetService<IOrderStore>().Should().BeNull();
+            provider.GetService<OrderStore>().Should().BeOfType<OrderStore>();
+            provider.GetService<ICheckoutStore>().Should().BeNull();
+            provider.GetService<CombinedStore>().Should().BeOfType<CombinedStore>();
+        }
     }
 }

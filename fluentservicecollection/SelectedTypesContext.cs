@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace fluentservicecollection
@@ -70,6 +71,12 @@ namespace fluentservicecollection
         public SelectedTypesContext WithService(Type typedef)
         {
             _getServiceType = classType => typedef;
+            return this;
+        }
+
+        public SelectedTypesContext AsSelf()
+        {
+            _getServiceType = classType => classType;
             return this;
         }
 
