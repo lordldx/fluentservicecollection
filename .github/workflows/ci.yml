@@ -1,0 +1,28 @@
+name: ci
+on:
+  push:
+    branches:
+      - 'features/*'
+      - 'bugfixes/*'
+      - 'releases/*'
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    name: build and test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.x'
+      - name: dotnet restore
+        run: dotnet restore
+      - name: dotnet build
+        run: dotnet build --configuration Release --no-restore
+      - name: dotnet test
+        run: dotnet test
