@@ -1,5 +1,7 @@
 name: Build and push to nuget
 on:
+  push:
+    branches: [main]
   release: 
     types: [created]
 
@@ -18,6 +20,6 @@ jobs:
       - name: dotnet build
         run: dotnet build --configuration Release --no-restore
       - name: dotnet pack
-        run: dotnet pack --configuration Release
-      - name: push to nuget
-        run: dotnet nuget push fluentservicecollection/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_APIKEY}}
+        run: dotnet pack --no-build --configuration Release -p:PackageVersion={{ env.GITHUB_REF }} --output .
+      # - name: push to nuget
+      #   run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_APIKEY}}
