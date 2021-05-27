@@ -13,8 +13,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.x'
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_APIKEY}}
       - name: dotnet restore
         run: dotnet restore
       - name: dotnet build
@@ -22,4 +20,4 @@ jobs:
       - name: dotnet pack
         run: dotnet pack --configuration Release
       - name: push to nuget
-        run: dotnet nuget push fluentservicecollection/bin/Release/*.nupkg
+        run: dotnet nuget push fluentservicecollection/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_APIKEY}}
