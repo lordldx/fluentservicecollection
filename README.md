@@ -9,7 +9,7 @@ fluentservicecollection allows to add multiple services with a mutual ancestor t
 # Examples
 
 Installing all classes that implement `IStore` scoped
-```
+```C#
 services.AddImplementationsOfType<IStore>()
                 .WithServiceFirstInterface()
                 .Scoped();
