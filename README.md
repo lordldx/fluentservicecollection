@@ -16,7 +16,7 @@ services.AddImplementationsOfType<IStore>()
 ```
 
 Installing all classes that implement `IFactory` as singleton, except the `TranslationFactory`
-```
+```C#
 services.AddImplementationsOfType(typeof(IFactory))
                 .Except<TranslationFactory>()
                 .WithServiceFirstInterface()
@@ -35,7 +35,7 @@ Using fluentservicecollection occurs in four steps:
 We start by selecting a basetype. 
 fluentservicecollection will then scan **all assemblies in the current AppDomain** for any type which implements the selected type.
 
-```
+```C#
 services.AddImplementationsOfType<IBaseType>() // regular type
 
 services.AddImplementationsOfType<IBaseType<SomeOtherType>> // generic type
@@ -48,7 +48,7 @@ If you want to exclude a couple of types from the list, for example because you 
 
 For example, here we'll select all types which implement `IStore`, except the `UserStore`, because we want to install that one as a singleton.
 
-```
+```C#
 services.AddImplementationsOfType<IStore>()
         .Except<UserStore>()
 ```
@@ -57,7 +57,7 @@ services.AddImplementationsOfType<IStore>()
 Now, if you want the installed types to be injected properly, we don't all want to install them with their top-level interface of course.
 If we would for example install two stores, e.g. `ProductStore` and `OrderStore` both as `IStore`, then dotnet would not know which store to inject if we would have an `IStore` dependency somewhere in a constructor
 
-```
+```C#
 services.AddImplementationsOfType<IStore>()
         .Scoped();
 
@@ -91,13 +91,13 @@ If you use this lifetime, then each selected class will be installed in the cont
 Essentially, fluentservicecollection will execute `services.AddSingleton<IService, Implemetation>()` for each selected type.
 
 An example, again with our two stores:
-```
+```C#
 services.AddImplementationsOfType<IStore>()
         .WithServiceDefaultInterface()
         .AsSingleton();
 ```
 is essentially the same as
-```
+```C#
 services.AddSingleton<IProductStore, ProductStore>();
 services.AddSingleton<IOrderStore, OrderStore>();
 ```
@@ -108,13 +108,13 @@ if you use this lifetime, then each selected class will be installed in the cont
 Essentially, fluentservicecollection will execute `services.AddScoped<IService, Implemetation>()` for each selected type.
 
 An example, again with our two stores:
-```
+```C#
 services.AddImplementationsOfType<IStore>()
         .WithServiceDefaultInterface()
         .Scoped();
 ```
 is essentially the same as
-```
+```C#
 services.AddScoped<IProductStore, ProductStore>();
 services.AddScoped<IOrderStore, OrderStore>();
 ```
