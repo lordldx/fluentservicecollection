@@ -19,7 +19,14 @@ jobs:
         run: dotnet restore
       - name: dotnet build
         run: dotnet build --configuration Release --no-restore
+      - name: determine version string
+        id: parse-version
+        uses: frabert/replace-string-action@v1.2
+        with:
+          pattern: "refs/tags/(.*)"
+          string: ${{github.ref}}
+          replace-with: "$1"      
       - name: dotnet pack
-        run: dotnet pack --no-build --configuration Release -p:PackageVersion=${{ github.ref }} --output .
+        run: dotnet pack --no-build --configuration Release -p:PackageVersion=${{ steps.parse-version.outputs.replaced }} --output .
       # - name: push to nuget
       #   run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_APIKEY}}
