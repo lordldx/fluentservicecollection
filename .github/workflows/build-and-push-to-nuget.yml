@@ -1,0 +1,24 @@
+name: Build and push to nuget
+on:
+  release: [created]
+
+jobs:
+  build_and_deploy:
+    name: Build and deploy
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core 3.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.x'
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_APIKEY}}
+      - name: dotnet restore
+        run: dotnet restore
+      - name: dotnet build
+        run: dotnet build --configuration Release --no-restore
+      - name: dotnet pack
+        run: dotnet pack --configuration Release
+      - name: push to nuget
+        run: dotnet nuget push fluentservicecollection/bin/Release/*.nupkg
